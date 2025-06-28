@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -53,7 +52,6 @@ if uploaded_file is not None:
         st.subheader("🗺️ Mapa Interactivo:")
         st.plotly_chart(fig, use_container_width=True, config=config)
 
-        # Exportar HTML directamente (opcional, no obligatorio en nube)
         with st.expander("💾 Exportar como HTML"):
             fig_html = fig.to_html(full_html=True)
             st.download_button("Descargar HTML interactivo", data=fig_html, file_name="mapa_mexico.html", mime="text/html")
