@@ -13,7 +13,7 @@ with open("estados_mexico.json", "r", encoding="utf-8") as f:
 uploaded_file = st.file_uploader("📄 Subir archivo Excel", type=["xlsx"])
 
 if uploaded_file is not None:
-    df = pd.read_excel(uploaded_file)
+    df = pd.read_excel(uploaded_file, header=1)
     st.write("Columnas detectadas:", df.columns.tolist())
     
     if "Estado" not in df.columns or "Convenio Status" not in df.columns:
