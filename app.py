@@ -22,25 +22,19 @@ if uploaded_file is not None:
         st.error("❌ El archivo debe contener las columnas 'Estado' y 'Convenio Status'.")
     else:
         df["Estado"] = df["Estado"].astype(str).str.strip()
-        df["Convenio Status"] = df["Convenio Status"].astype(str).str.strip()
 
-        # Normaliza posibles variantes
-        df["Convenio Status"] = df["Convenio Status"].replace({
-            "detenido": "Detenido",
-            "en proceso": "En proceso",
-            "firmado": "Firmado",
-            "DETENIDO": "Detenido",
-            "EN PROCESO": "En proceso",
-            "FIRMADO": "Firmado"
-        })
+        df["Convenio Status"] = (
+            df["Convenio Status"]
+            .astype(str)
+            .str.strip()
+            .str.upper()
+        )
 
         colores = {
-            "Detenido": "#d32f2f",
-            "En proceso": "#f0e68c",
-            "Firmado": "#1b5e20"
+            "DETENIDO": "#d32f2f",
+            "EN PROCESO": "#f0e68c",
+            "FIRMADO": "#1b5e20"
         }
-
-        st.write("Valores únicos en Convenio Status:", df["Convenio Status"].unique())
 
         st.subheader("📊 Datos cargados:")
         st.dataframe(df)
@@ -52,7 +46,7 @@ if uploaded_file is not None:
             locations="Estado",
             color="Convenio Status",
             color_discrete_map=colores,
-            category_orders={"Convenio Status": ["Detenido", "En proceso", "Firmado"]},
+            category_orders={"Convenio Status": ["DETENIDO", "EN PROCESO", "FIRMADO"]},
             scope="north america"
         )
 
