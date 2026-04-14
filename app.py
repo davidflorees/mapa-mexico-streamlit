@@ -14,18 +14,33 @@ uploaded_file = st.file_uploader("📄 Subir archivo Excel", type=["xlsx"])
 
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file, header=1)
+    df.columns = df.columns.astype(str).str.strip()
+
     st.write("Columnas detectadas:", df.columns.tolist())
-    
+
     if "Estado" not in df.columns or "Convenio Status" not in df.columns:
         st.error("❌ El archivo debe contener las columnas 'Estado' y 'Convenio Status'.")
     else:
+        df["Estado"] = df["Estado"].astype(str).str.strip()
+        df["Convenio Status"] = df["Convenio Status"].astype(str).str.strip()
+
+        # Normaliza posibles variantes
+        df["Convenio Status"] = df["Convenio Status"].replace({
+            "detenido": "Detenido",
+            "en proceso": "En proceso",
+            "firmado": "Firmado",
+            "DETENIDO": "Detenido",
+            "EN PROCESO": "En proceso",
+            "FIRMADO": "Firmado"
+        })
+
         colores = {
             "Detenido": "#d32f2f",
             "En proceso": "#f0e68c",
             "Firmado": "#1b5e20"
         }
 
-        df["Color"] = df["Convenio Status"].map(colores)
+        st.write("Valores únicos en Convenio Status:", df["Convenio Status"].unique())
 
         st.subheader("📊 Datos cargados:")
         st.dataframe(df)
@@ -37,6 +52,7 @@ if uploaded_file is not None:
             locations="Estado",
             color="Convenio Status",
             color_discrete_map=colores,
+            category_orders={"Convenio Status": ["Detenido", "En proceso", "Firmado"]},
             scope="north america"
         )
 
