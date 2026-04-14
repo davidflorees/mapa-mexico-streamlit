@@ -21,8 +21,8 @@ if uploaded_file is not None:
     else:
         colores = {
             "Detenido": "#c61a19",
-            "En proceso": "#f0bd0b",
-            "Firmado": "#10253f"
+            "En proceso": "#EBDE7C",
+            "Firmado": "#035223"
         }
 
         df["Color"] = df["Convenio Status"].map(colores)
