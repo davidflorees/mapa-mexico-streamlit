@@ -20,9 +20,9 @@ if uploaded_file is not None:
         st.error("❌ El archivo debe contener las columnas 'Estado' y 'Convenio Status'.")
     else:
         colores = {
-            "Detenido": "#c61a19",
-            "En proceso": "#EBDE7C",
-            "Firmado": "#035223"
+            "Detenido": "#d32f2f",
+            "En proceso": "#f0e68c",
+            "Firmado": "#1b5e20"
         }
 
         df["Color"] = df["Convenio Status"].map(colores)
