@@ -5,7 +5,7 @@ import json
 
 st.set_page_config(page_title="Mapa Interactivo de México", layout="wide")
 st.title("📍 Mapa de México por Estatus")
-st.markdown("Sube un archivo Excel con los estados y estatus para visualizar el mapa dinámico.")
+st.markdown("Sube un archivo Excel con los estados y el estatus del convenio para visualizar el mapa dinámico.")
 
 with open("estados_mexico.json", "r", encoding="utf-8") as f:
     geojson = json.load(f)
@@ -15,16 +15,16 @@ uploaded_file = st.file_uploader("📄 Subir archivo Excel", type=["xlsx"])
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
 
-    if "Estado" not in df.columns or "Estatus" not in df.columns:
-        st.error("❌ El archivo debe contener las columnas 'Estado' y 'Estatus'.")
+    if "Estado" not in df.columns or "Convenio Status" not in df.columns:
+        st.error("❌ El archivo debe contener las columnas 'Estado' y 'Convenio Status'.")
     else:
         colores = {
-            "Integrado": "#10253f",
+            "Detenido": "#c61a19",
             "En proceso": "#f0bd0b",
-            "Sin acción": "#c61a19"
+            "Firmado": "#10253f"
         }
 
-        df["Color"] = df["Estatus"].map(colores)
+        df["Color"] = df["Convenio Status"].map(colores)
 
         st.subheader("📊 Datos cargados:")
         st.dataframe(df)
@@ -34,12 +34,13 @@ if uploaded_file is not None:
             geojson=geojson,
             featureidkey="properties.name",
             locations="Estado",
-            color="Estatus",
+            color="Convenio Status",
             color_discrete_map=colores,
             scope="north america"
         )
+
         fig.update_geos(fitbounds="locations", visible=False)
-        fig.update_layout(margin={"r":0,"t":30,"l":0,"b":0})
+        fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 
         config = {
             "toImageButtonOptions": {
@@ -54,4 +55,9 @@ if uploaded_file is not None:
 
         with st.expander("💾 Exportar como HTML"):
             fig_html = fig.to_html(full_html=True)
-            st.download_button("Descargar HTML interactivo", data=fig_html, file_name="mapa_mexico.html", mime="text/html")
+            st.download_button(
+                "Descargar HTML interactivo",
+                data=fig_html,
+                file_name="mapa_mexico.html",
+                mime="text/html"
+            )
