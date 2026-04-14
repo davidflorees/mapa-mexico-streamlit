@@ -14,7 +14,8 @@ uploaded_file = st.file_uploader("📄 Subir archivo Excel", type=["xlsx"])
 
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
-
+    st.write("Columnas detectadas:", df.columns.tolist())
+    
     if "Estado" not in df.columns or "Convenio Status" not in df.columns:
         st.error("❌ El archivo debe contener las columnas 'Estado' y 'Convenio Status'.")
     else:
