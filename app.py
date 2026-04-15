@@ -9,9 +9,6 @@ st.markdown("Sube un archivo Excel con los estados y el estatus del convenio par
 
 with open("estados_mexico.json", "r", encoding="utf-8") as f:
     geojson = json.load(f)
-    
-nombres_geojson = [feature["properties"]["name"] for feature in geojson["features"]]
-st.write("Estados en geojson:", nombres_geojson)
 
 uploaded_file = st.file_uploader("📄 Subir archivo Excel", type=["xlsx"])
 
@@ -25,13 +22,15 @@ if uploaded_file is not None:
         st.error("❌ El archivo debe contener las columnas 'Estado' y 'Convenio Status'.")
     else:
         df["Estado"] = df["Estado"].astype(str).str.strip()
+        df["Convenio Status"] = df["Convenio Status"].astype(str).str.strip().str.upper()
 
-        df["Convenio Status"] = (
-            df["Convenio Status"]
-            .astype(str)
-            .str.strip()
-            .str.upper()
-        )
+        # Ajuste para que coincida con el geojson
+        df["Estado"] = df["Estado"].replace({
+            "Estado de México": "México",
+            "Estado de mexico": "México",
+            "Edo. de México": "México",
+            "Edo de México": "México"
+        })
 
         colores = {
             "DETENIDO": "#d32f2f",
