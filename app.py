@@ -9,6 +9,9 @@ st.markdown("Sube un archivo Excel con los estados y el estatus del convenio par
 
 with open("estados_mexico.json", "r", encoding="utf-8") as f:
     geojson = json.load(f)
+    
+nombres_geojson = [feature["properties"]["name"] for feature in geojson["features"]]
+st.write("Estados en geojson:", nombres_geojson)
 
 uploaded_file = st.file_uploader("📄 Subir archivo Excel", type=["xlsx"])
 
